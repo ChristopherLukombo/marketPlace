@@ -1,0 +1,16 @@
+{
+  "name": "backEnd",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "truffle test",
+  },
+  "dependencies": {
+    "@truffle/hdwallet-provider": "~1.0.25"
+  },
+  "private": true,
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
