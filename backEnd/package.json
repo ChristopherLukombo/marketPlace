@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "truffle test",
+    "test": "truffle test"
   },
   "dependencies": {
     "@truffle/hdwallet-provider": "~1.0.25"
