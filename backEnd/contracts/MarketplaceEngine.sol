@@ -1,4 +1,5 @@
-pragma solidity >=0.4.21 <0.6.0;
+pragma solidity >= 0.4.21 < 0.6.0;
+pragma experimental ABIEncoderV2;
 
 contract MarketplaceEngine {
 
@@ -13,16 +14,12 @@ contract MarketplaceEngine {
         address salesman;
         uint256 roomCount;
         uint256 date;
+		bool isSold;
     }
 
-     uint numCampaigns;
-
-    event Transfer(address indexed _from, address indexed _to, uint256 _value);
-
-     mapping (address => uint) balances;
-
-
-    mapping(address => House) public houseForSale;
+    // Dictionary idHouse with userAddress
+	mapping(uint256 => address) public owners;
+    House[] public houses;
 
     function addHouse(
         string memory _addressHouse,
@@ -34,33 +31,54 @@ contract MarketplaceEngine {
         uint256 _roomCount,
         uint256 _date
         ) public {
-        houseForSale[msg.sender] = House(1, _addressHouse, _price, _surface, _description, _documents, _salesman, _roomCount, _date);
+			
+        houses.push(House(houses.length + 1, _addressHouse, _price, _surface, _description, _documents, _salesman, _roomCount, _date, false));
+		owners[houses.length + 1] = msg.sender;	
     }
 
-    function buyHouse(address receiver, uint amount) public returns(bool sufficifient) {
-        if (balances[msg.sender] < amount) {
-            return false;
+    function buyHouse (uint256 _idHouse) external payable returns (bool)
+    {
+        for(uint i = 0; i < houses.length; i++)
+        {
+            if (houses[i].idHouse == _idHouse)
+            {
+                require(msg.value == houses[i].price);
+                
+                owners[_idHouse].transfer(msg.value);
+                owners[_idHouse] = msg.sender; // Changement de proprio
+                houses[i].isSold = true;
+                
+                return true;
+            }
         }
-
-        // débiter sender
-        balances[msg.sender] -= houseForSale[msg.sender].price;
-        // augmenter receiver
-        balances[receiver] += houseForSale[msg.sender].price;
-        emit Transfer(msg.sender, receiver, amount);
-        return true;
+        
+        return false;
     }
-
-
-    // function sellHouse() public {
-
-    // }
-
-    // function getSaleHouses() public returns(bool sufficifient)  {
-    //     return houseForSale;
-    // }
-
-    // function getHouseInfo(address addressHouse) public {
-    //      return houseForSale[addressHouse];
-    // }
+    
+    function getSaleHouses() public returns (House[])
+    {
+        House[] result;
+        
+        for(uint i = 0; i < houses.length; i++)
+        {
+            if (!houses[i].isSold)
+            {
+                result.push(houses[i]);
+            }
+        }
+        
+        return result;
+    }
+    
+    function getHouseInfo(uint256 _idHouse) public returns (House)
+    {
+        for(uint i = 0; i < houses.length; i++)
+        {
+            if (houses[i].idHouse == _idHouse)
+            {
+                return houses[i];
+            }
+        }
+    }
 
 }
