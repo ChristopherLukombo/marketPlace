@@ -54,14 +54,16 @@ export class AppComponent implements OnInit {
     this.status = message;
   }
 
-  sendCoin() {
+  buyHouse() {
     this.setStatus('Initiating transaction... (please wait)');
-
-    this.contract.sendCoin(this.account, this.recipientAddress, this.sendingAmount)
+       this.recipientAddress = '0x1E76Dd43458fb1D28e783637C32fEEfefF509d1f';
+       this.sendingAmount = 10;
+    this.contract.buyHouse(this.account, this.recipientAddress, this.sendingAmount)
       .subscribe(() => {
         this.setStatus('Transaction complete!');
         this.refreshBalance();
       }, error => this.setStatus('Error sending coin; see log.'));
   }
+
 
 }

@@ -32,7 +32,7 @@ export class ContractService {
           });
         })
         .then(value => {
-          observer.next(value)
+          observer.next(value);
           observer.complete();
         })
         .catch(error => {
@@ -42,7 +42,7 @@ export class ContractService {
     });
   }
 
-  sendCoin(from, to, amount): Observable<any> {
+  buyHouse(from, to: string, amount: number): Observable<any> {
     let meta;
 
     return Observable.create(observer => {
@@ -50,7 +50,7 @@ export class ContractService {
         .deployed()
         .then(instance => {
           meta = instance;
-          return meta.sendCoin(to, amount, {
+          return meta.buyHouse(to, amount, {
             from: from
           });
         })
@@ -58,9 +58,9 @@ export class ContractService {
           observer.next();
           observer.next();
         })
-        .catch(e => {
-          console.log(e);
-          observer.error(e);
+        .catch(error => {
+          console.log(error);
+          observer.error(error);
         });
     });
   }

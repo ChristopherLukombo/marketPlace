@@ -17,6 +17,10 @@ contract MarketplaceEngine {
 
      uint numCampaigns;
 
+    event Transfer(address indexed _from, address indexed _to, uint256 _value);
+
+     mapping (address => uint) balances;
+
 
     mapping(address => House) public houseForSale;
 
@@ -33,21 +37,30 @@ contract MarketplaceEngine {
         houseForSale[msg.sender] = House(1, _addressHouse, _price, _surface, _description, _documents, _salesman, _roomCount, _date);
     }
 
-    function buyHouse() public {
+    function buyHouse(address receiver, uint amount) public returns(bool sufficifient) {
+        if (balances[msg.sender] < amount) {
+            return false;
+        }
 
+        // débiter sender
+        balances[msg.sender] -= houseForSale[msg.sender].price;
+        // augmenter receiver
+        balances[receiver] += houseForSale[msg.sender].price;
+        emit Transfer(msg.sender, receiver, amount);
+        return true;
     }
 
-    function sellHouse() public {
 
-    }
+    // function sellHouse() public {
 
-    function getSaleHouses() public {
-        //return houseForSale[idHouse];
-    }
+    // }
 
-    function getHouseInfo() public {
+    // function getSaleHouses() public returns(bool sufficifient)  {
+    //     return houseForSale;
+    // }
 
-    }
-
+    // function getHouseInfo(address addressHouse) public {
+    //      return houseForSale[addressHouse];
+    // }
 
 }
