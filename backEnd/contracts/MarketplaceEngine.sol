@@ -60,8 +60,18 @@ contract MarketplaceEngine {
     
     function getSaleHouses() public returns (House[] memory)
     {
-        House[] memory result;
+        uint count = 0;
         uint index = 0;
+        
+        for(uint i = 0; i < houses.length; i++)
+        {
+            if (!houses[i].isSold)
+            {
+                count++;
+            }
+        }
+        
+        House[] memory result = new House[](count);
         
         for(uint i = 0; i < houses.length; i++)
         {
