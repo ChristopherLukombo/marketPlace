@@ -8,6 +8,7 @@ export class House {
     public description?: string,
     public roomCount?: number,
     public creationDate?: number,
+    public isSold?: boolean,
     public owner?: string
   ) { }
 }

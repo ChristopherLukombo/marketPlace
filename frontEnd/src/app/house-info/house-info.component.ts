@@ -40,7 +40,7 @@ export class HouseInfoComponent implements OnInit {
     this.getHouseInfo(idHouse, this.from);
   }
 
-  private getHouseInfo(_idHouse: number, account) {
+  private getHouseInfo(_idHouse: number, account: string) {
     this.contractService.getHouseInfo(_idHouse, account).subscribe(data => {
       this.house = data;
       this.house.creationDate = new Date(this.house.creationDate * 1000);

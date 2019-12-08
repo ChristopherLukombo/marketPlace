@@ -14,10 +14,11 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CreateHouseComponent } from './create-house/create-house.component';
 import { HeaderComponent } from './header/header.component';
+import { HouseDialogSuccessComponent } from './house-dialog-success/house-dialog-success.component';
+import { HouseInfoComponent } from './house-info/house-info.component';
 import { HousesComponent } from './houses/houses.component';
 import { ContractService } from './services/contract.service';
 import { Web3Service } from './services/web3.service';
-import { HouseInfoComponent } from './house-info/house-info.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,11 @@ import { HouseInfoComponent } from './house-info/house-info.component';
     CreateHouseComponent,
     HousesComponent,
     HeaderComponent,
-    HouseInfoComponent
+    HouseInfoComponent,
+    HouseDialogSuccessComponent
+  ],
+  entryComponents: [
+    HouseDialogSuccessComponent,
   ],
   imports: [
     ReactiveFormsModule,
