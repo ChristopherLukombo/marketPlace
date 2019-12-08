@@ -17,13 +17,15 @@ import { HeaderComponent } from './header/header.component';
 import { HousesComponent } from './houses/houses.component';
 import { ContractService } from './services/contract.service';
 import { Web3Service } from './services/web3.service';
+import { HouseInfoComponent } from './house-info/house-info.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     CreateHouseComponent,
     HousesComponent,
-    HeaderComponent
+    HeaderComponent,
+    HouseInfoComponent
   ],
   imports: [
     ReactiveFormsModule,
