@@ -1,0 +1,16 @@
+<h2>Maisons à vendre</h2>
+
+<mat-list *ngFor="let house of houses">
+  <mat-list-item>
+    Addresse : {{house.addressHouse}} - Prix : {{house.price}} ETH - Propriétaire : {{house.owner}}
+    <button
+        mat-button
+        (click)="buyHouse(house)">
+        Acheter
+      </button>
+  </mat-list-item>
+</mat-list>
+
+<ul>
+  <li><button mat-button routerLink="/createHouse" routerLinkActive="active">Ajouter une maison</button></li>
+</ul>
