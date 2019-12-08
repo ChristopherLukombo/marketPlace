@@ -1,13 +1,17 @@
 {
-  "name": "backEnd",
+  "name": "backend",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "truffle test"
+    "test": "mocha"
   },
   "dependencies": {
-    "@truffle/hdwallet-provider": "~1.0.25"
+    "@truffle/hdwallet-provider": "~1.0.25",
+    "events": "3.0.0",
+    "ganache-cli": "~6.7.0",
+    "solc": "~0.4.25",
+    "mocha": "~6.2.2"
   },
   "private": true,
   "keywords": [],

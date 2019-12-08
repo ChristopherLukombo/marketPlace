@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, Observer } from 'rxjs';
 import contract from 'truffle-contract';
 import { Web3Service } from './web3.service';
+import { House } from 'src/model/house';
 
-declare var require: any;
+declare let window: any;
+
+declare let require: any;
 const tokenAbi = require('../../../../backEnd/build/contracts/MarketplaceEngine.json');
 
 @Injectable({
@@ -13,54 +16,80 @@ export class ContractService {
 
   MetaCoin = contract(tokenAbi);
 
-  constructor(
-    private web3Service: Web3Service,
-  ) {
+  constructor(private web3Service: Web3Service) {
     this.MetaCoin.setProvider(web3Service.web3.currentProvider);
   }
 
-  getBalance(account): Observable<number> {
-    let meta;
-
-    return Observable.create(observer => {
+  addHouse(house: House, from: string): Observable<any> {
+    return new Observable((observer: Observer<any>) => {
       this.MetaCoin
         .deployed()
         .then(instance => {
-          meta = instance;
-          return meta.getBalance.call(account, {
-            from: account
-          });
-        })
-        .then(value => {
-          observer.next(value)
-          observer.complete();
-        })
-        .catch(error => {
-          console.log(error);
+          return instance.addHouse(
+            house.title,
+            house.addressHouse,
+            house.price,
+            house.surface,
+            house.description,
+            house.roomCount,
+            house.creationDate,
+            house.owner,
+            { from });
+        }).then(data => {
+          observer.next(data);
+        }).catch(error => {
           observer.error(error);
         });
     });
   }
 
-  sendCoin(from, to, amount): Observable<any> {
-    let meta;
-
-    return Observable.create(observer => {
+  buyHouse(from: string, house: House): Observable<any> {
+    return new Observable((observer: Observer<any>) => {
       this.MetaCoin
         .deployed()
         .then(instance => {
-          meta = instance;
-          return meta.sendCoin(to, amount, {
-            from: from
+          return instance.buyHouse(
+            house.idHouse,
+            {
+              from,
+              value: window.web3.toWei(house.price, 'ether')
+            });
+        }).then(data => {
+          observer.next(data);
+        }).catch(error => {
+          observer.error(error);
+        });
+    });
+  }
+
+  getHouseInfo(_idHouse: number, from: string) {
+    return new Observable((observer: Observer<any>) => {
+      this.MetaCoin
+        .deployed()
+        .then(instance => {
+          return instance.getHouseInfo(
+            _idHouse, {
+            from
           });
         })
-        .then(() => {
-          observer.next();
-          observer.next();
-        })
-        .catch(e => {
-          console.log(e);
-          observer.error(e);
+        .then(data => {
+          observer.next(data);
+        }).catch(error => {
+          observer.error(error);
+        });
+    });
+  }
+
+  getSaleHouses(from: string) {
+    return new Observable((observer: Observer<any>) => {
+      this.MetaCoin
+        .deployed()
+        .then(instance => {
+          return instance.getSaleHouses({ from });
+        }).then(data => {
+          observer.next(data);
+        }).catch(error => {
+          observer.error(error);
         });
     });
   }

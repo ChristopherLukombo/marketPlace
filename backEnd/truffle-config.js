@@ -41,6 +41,12 @@ module.exports = {
     // tab if you use this network and you must also set the `host`, `port` and `network_id`
     // options below to some value.
     //
+    rinkeby: {
+      host: "127.0.0.1",
+      port: 8545,
+      from: "0x1E76Dd43458fb1D28e783637C32fEEfefF509d1f",
+      network_id: "*"
+    },
     development: {
      host: "127.0.0.1",     // Localhost (default: none)
      port: 8545,            // Standard Ethereum port (default: none)
@@ -84,6 +90,7 @@ module.exports = {
   // Configure your compilers
   compilers: {
     solc: {
+      version: "0.4.25"
       // version: "0.5.1",    // Fetch exact version from solc-bin (default: truffle's version)
       // docker: true,        // Use "0.5.1" you've installed locally with docker (default: false)
       // settings: {          // See the solidity docs for advice about optimization and evmVersion

@@ -1,0 +1,21 @@
+<div class="container">
+    <div *ngIf="house">
+          <h2 class="titleContainer">Informations</h2>
+          <mat-list>
+          <mat-list-item><span class="subTitleContainer">Id de la maison &nbsp;</span> : {{house.idHouse}}</mat-list-item>
+          <mat-list-item><span class="subTitleContainer">Titre de l'annonce &nbsp;</span> : {{house.title}}</mat-list-item>
+          <mat-list-item><span class="subTitleContainer">Addresse &nbsp;</span> : {{house.addressHouse}}</mat-list-item>
+          <mat-list-item><span class="subTitleContainer">Prix &nbsp;</span> : {{house.price | number : '1.2-2'}} ETH</mat-list-item>
+          <mat-list-item><span class="subTitleContainer">Surface &nbsp;</span> : {{house.surface}}</mat-list-item>
+          <mat-list-item><span class="subTitleContainer">Description &nbsp;</span> : {{house.description}}</mat-list-item>
+          <mat-list-item><span class="subTitleContainer">Nombre de pièces &nbsp;</span> : {{house.roomCount}}</mat-list-item>
+          <mat-list-item><span class="subTitleContainer">Date de création &nbsp;</span> : {{house.creationDate | date: 'dd/MM/yyyy'}}</mat-list-item>
+          <mat-list-item><span class="subTitleContainer">Propriétaire &nbsp;</span> : {{house.owner}}</mat-list-item>
+        </mat-list>
+        <button mat-button mat-raised-button color="primary" routerLink="/houses" routerLinkActive="active" class="btnReturn">Retour</button>
+    </div>
+    <div *ngIf="null === house">
+        <h4 class="titleContainerNoId">Pas de maison correspondant à cet id.</h4>
+        <button mat-button mat-raised-button color="primary" routerLink="/houses" routerLinkActive="active" class="btnReturn">Retour</button>
+    </div>
+</div>
