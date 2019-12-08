@@ -21,7 +21,7 @@ export class HousesComponent implements OnInit {
   balance: number;
   from: string;
 
-  displayedColumns: string[] = ['idHouse', 'price', 'owner', 'actions'];
+  displayedColumns: string[] = ['idHouse', 'title', 'price', 'actions'];
   dataSource;
 
   constructor(
@@ -59,8 +59,8 @@ export class HousesComponent implements OnInit {
       data.forEach(house => {
         dataSource.push({
           idHouse: house.idHouse,
-          price: house.price,
-          owner: house.owner
+          title: house.title,
+          price: house.price
         });
       });
       this.dataSource = dataSource;

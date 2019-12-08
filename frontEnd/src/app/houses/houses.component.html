@@ -3,7 +3,7 @@
 
 
   <ul class="listActions">
-    <li><button mat-button routerLink="/createHouse" routerLinkActive="active">Ajouter une maison</button></li>
+    <li><button mat-button mat-raised-button color="primary" routerLink="/createHouse" routerLinkActive="active">Ajouter une maison</button></li>
   </ul>
 
   <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" *ngIf="(dataSource && dataSource.length > 0)">
@@ -14,27 +14,27 @@
       <td mat-cell *matCellDef="let element"> {{element.idHouse}} </td>
     </ng-container>
 
+     <!-- Owner Title -->
+     <ng-container matColumnDef="title">
+        <th mat-header-cell *matHeaderCellDef> Titre de l'annonce </th>
+        <td mat-cell *matCellDef="let element"> {{element.title}} </td>
+      </ng-container>
+
     <!-- Price Column -->
     <ng-container matColumnDef="price">
       <th mat-header-cell *matHeaderCellDef> Prix </th>
       <td mat-cell *matCellDef="let element"> {{element.price | number : '1.2-2'}} ETH</td>
     </ng-container>
 
-    <!-- Owner Column -->
-    <ng-container matColumnDef="owner">
-      <th mat-header-cell *matHeaderCellDef> Propriétaire </th>
-      <td mat-cell *matCellDef="let element"> {{element.owner}} </td>
-    </ng-container>
-
     <!-- Actions Column -->
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef> Actions </th>
       <td mat-cell *matCellDef="let element">
-        <button mat-button (click)="buyHouse(element.idHouse, element.price)">
+        <button mat-button class="btnShopping" (click)="buyHouse(element.idHouse, element.price)">
           Acheter
         </button>
         &nbsp;
-        <span class="info">
+        <span class="info" [routerLink]="['/houseInfo', element.idHouse]" routerLinkActive="active">
           <i class="fa fa-info-circle" aria-hidden="true"></i>
         </span>
       </td>
