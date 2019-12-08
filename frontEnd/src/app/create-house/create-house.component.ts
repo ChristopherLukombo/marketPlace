@@ -41,22 +41,21 @@ export class CreateHouseComponent implements OnInit {
 
   private createForm() {
     const target = {
+      title: ['', [Validators.required]],
       addressHouse: ['', [Validators.required]],
       price: ['', [Validators.required]],
       surface: ['', [Validators.required]],
       description: ['', [Validators.required]],
-      documents: ['', []],
-      salesman: ['', []],
-      roomCount: ['', []],
-      creationDate: ['', []],
-      owner: ['', []],
+      roomCount: ['', [Validators.required]],
+      creationDate: ['', [Validators.required]],
+      owner: ['', [Validators.required]],
     };
 
     this.createHouseForm = this.formBuilder.group(target);
   }
 
   // convenience getter for easy access to form fields
-  get f() { return this.createHouseForm.controls; }
+  get f() { debugger; return this.createHouseForm.controls; }
 
   onReady() {
     this.web3Service.getAccounts().subscribe(data => {
@@ -75,31 +74,31 @@ export class CreateHouseComponent implements OnInit {
   }
 
   public addHouse() {
-    this.submitted = true;
 
-    const house = new House();
-    house.addressHouse = this.createHouseForm.controls.addressHouse.value;
-    house.price = this.createHouseForm.controls.price.value;
-    house.surface = this.createHouseForm.controls.surface.value;
-    house.description = this.createHouseForm.controls.description.value;
-    house.documents = ['0xFc72D387b7c15d09856e4423719867d35Eab4C86'];
-    house.salesman = '0xFc72D387b7c15d09856e4423719867d35Eab4C86';
-    house.roomCount = this.createHouseForm.controls.roomCount.value;
-    house.creationDate = this.toTimeStamp(this.createHouseForm.controls.creationDate.value);
-    house.owner = this.createHouseForm.controls.owner.value;
+    this.submitted = true;
 
     if (this.createHouseForm.invalid) {
       return;
     }
 
+    const house = new House();
+    house.title = this.createHouseForm.controls.title.value;
+    house.addressHouse = this.createHouseForm.controls.addressHouse.value;
+    house.price = this.createHouseForm.controls.price.value;
+    house.surface = this.createHouseForm.controls.surface.value;
+    house.description = this.createHouseForm.controls.description.value;
+    house.roomCount = this.createHouseForm.controls.roomCount.value;
+    house.creationDate = this.toTimeStamp(this.createHouseForm.controls.creationDate.value);
+    house.owner = this.createHouseForm.controls.owner.value;
 
     this.contract.addHouse(house, this.from).subscribe(() => {
       // redirection sur la liste des maisons
       this.resetForm();
       this.router.navigate(['houses']);
       alert('success');
-      this.submitted = true;
+      this.submitted = false;
     }, error => {
+      this.submitted = false;
       alert('error add House' + error);
     }
     );
