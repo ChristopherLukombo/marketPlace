@@ -5,12 +5,11 @@ contract MarketplaceEngine {
 
     struct House {
         uint256 idHouse;
+        string title;
         string addressHouse;
         uint256 price;
         uint256 surface;
         string description;
-        address[] documents;
-        address salesman;
         uint256 roomCount;
         uint256 creationDate;
         bool isSold;
@@ -31,25 +30,23 @@ contract MarketplaceEngine {
     }
 
     function addHouse(
+        string memory _title,
         string memory _addressHouse,
         uint256 _price,
         uint256 _surface,
         string memory _description,
-        address[] memory _documents,
-        address _salesman,
         uint256 _roomCount,
         uint256 _creationDate,
         address _owner
         ) public {
             houses.push(
                 House(
-                    houses.length,
+                    houses.length + 1,
+                    _title,
                     _addressHouse,
                     _price,
                     _surface,
                     _description,
-                    _documents,
-                    _salesman,
                     _roomCount,
                     _creationDate,
                     false,
@@ -104,11 +101,17 @@ contract MarketplaceEngine {
 
     function getHouseInfo(uint256 _idHouse) public view returns (House memory)
     {
+        House memory house = findHouseById(_idHouse);
+        require (0 != house.idHouse, "La maison n'existe pas.");
+        return house;
+    }
+
+    function findHouseById(uint256 _idHouse) private view returns (House memory) {
         for (uint k = 0; k < houses.length; k++)
         {
             if (houses[k].idHouse == _idHouse)
             {
-                return houses[k];
+                 return houses[k];
             }
         }
     }

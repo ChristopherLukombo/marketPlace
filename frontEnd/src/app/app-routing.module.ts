@@ -1,12 +1,17 @@
-import { CreateHouseComponent } from './create-house/create-house.component';
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
+import { CreateHouseComponent } from './create-house/create-house.component';
+import { HouseInfoComponent } from './house-info/house-info.component';
 import { HousesComponent } from './houses/houses.component';
 
 const routes: Routes = [
   {
     path: 'createHouse',
     component: CreateHouseComponent
+  },
+  {
+    path: 'houseInfo/:idHouse',
+    component: HouseInfoComponent
   },
   {
     path: 'houses',

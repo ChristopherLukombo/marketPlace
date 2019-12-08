@@ -26,12 +26,11 @@ export class ContractService {
         .deployed()
         .then(instance => {
           return instance.addHouse(
+            house.title,
             house.addressHouse,
             house.price,
             house.surface,
             house.description,
-            house.documents,
-            house.salesman,
             house.roomCount,
             house.creationDate,
             house.owner,

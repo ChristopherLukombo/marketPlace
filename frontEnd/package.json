@@ -26,7 +26,8 @@
     "truffle-contract": "~4.0.31",
     "tslib": "^1.9.0",
     "web3": "~1.2.4",
-    "zone.js": "~0.9.1"
+    "zone.js": "~0.9.1",
+    "font-awesome": "~4.7.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.800.0",

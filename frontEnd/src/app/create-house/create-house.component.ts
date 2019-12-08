@@ -4,6 +4,11 @@ import { ContractService } from '../services/contract.service';
 import { House } from 'src/model/house';
 import { Router } from '@angular/router';
 import { Validators, FormGroup, FormBuilder } from '@angular/forms';
+import { HouseDialogSuccessComponent } from '../house-dialog-success/house-dialog-success.component';
+import { MatDialog } from '@angular/material/dialog';
+
+const WIDTH = '50%';
+const HEIGHT = '15%';
 
 @Component({
   selector: 'app-create-house',
@@ -26,11 +31,14 @@ export class CreateHouseComponent implements OnInit {
 
   owners: string[];
 
+  errorMessage: string;
+
   constructor(
     private web3Service: Web3Service,
     private contract: ContractService,
     private router: Router,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    public dialog: MatDialog
   ) { }
 
   ngOnInit() {
@@ -41,15 +49,14 @@ export class CreateHouseComponent implements OnInit {
 
   private createForm() {
     const target = {
+      title: ['', [Validators.required]],
       addressHouse: ['', [Validators.required]],
       price: ['', [Validators.required]],
       surface: ['', [Validators.required]],
       description: ['', [Validators.required]],
-      documents: ['', []],
-      salesman: ['', []],
-      roomCount: ['', []],
-      creationDate: ['', []],
-      owner: ['', []],
+      roomCount: ['', [Validators.required]],
+      creationDate: ['', [Validators.required]],
+      owner: ['', [Validators.required]],
     };
 
     this.createHouseForm = this.formBuilder.group(target);
@@ -75,33 +82,46 @@ export class CreateHouseComponent implements OnInit {
   }
 
   public addHouse() {
-    this.submitted = true;
 
-    const house = new House();
-    house.addressHouse = this.createHouseForm.controls.addressHouse.value;
-    house.price = this.createHouseForm.controls.price.value;
-    house.surface = this.createHouseForm.controls.surface.value;
-    house.description = this.createHouseForm.controls.description.value;
-    house.documents = ['0xFc72D387b7c15d09856e4423719867d35Eab4C86'];
-    house.salesman = '0xFc72D387b7c15d09856e4423719867d35Eab4C86';
-    house.roomCount = this.createHouseForm.controls.roomCount.value;
-    house.creationDate = this.toTimeStamp(this.createHouseForm.controls.creationDate.value);
-    house.owner = this.createHouseForm.controls.owner.value;
+    this.submitted = true;
 
     if (this.createHouseForm.invalid) {
       return;
     }
 
+    const house = new House();
+    house.title = this.createHouseForm.controls.title.value;
+    house.addressHouse = this.createHouseForm.controls.addressHouse.value;
+    house.price = this.createHouseForm.controls.price.value;
+    house.surface = this.createHouseForm.controls.surface.value;
+    house.description = this.createHouseForm.controls.description.value;
+    house.roomCount = this.createHouseForm.controls.roomCount.value;
+    house.creationDate = this.toTimeStamp(this.createHouseForm.controls.creationDate.value);
+    house.owner = this.createHouseForm.controls.owner.value;
 
     this.contract.addHouse(house, this.from).subscribe(() => {
-      // redirection sur la liste des maisons
       this.resetForm();
-      this.router.navigate(['houses']);
-      alert('success');
-      this.submitted = true;
+      this.openDialogSuccess();
+      this.submitted = false;
+      // redirection sur la liste des maisons
+      setTimeout(() => {
+          this.router.navigate(['houses']);
+          this.dialog.closeAll();
+        }, 3000);
     }, error => {
-      alert('error add House' + error);
+      this.submitted = false;
+      this.errorMessage = 'Une erreur s\'est produite';
     }
+    );
+  }
+
+  public openDialogSuccess(): void {
+    this.dialog.open(
+      HouseDialogSuccessComponent,
+      {
+        width: WIDTH,
+        height: HEIGHT
+      }
     );
   }
 
