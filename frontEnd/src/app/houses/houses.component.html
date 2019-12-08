@@ -1,16 +1,48 @@
-<h2>Maisons à vendre</h2>
+<div class="container">
+  <h2 class="subTitle">Maisons à vendre</h2>
 
-<mat-list *ngFor="let house of houses">
-  <mat-list-item>
-    Addresse : {{house.addressHouse}} - Prix : {{house.price}} ETH - Propriétaire : {{house.owner}}
-    <button
-        mat-button
-        (click)="buyHouse(house)">
-        Acheter
-      </button>
-  </mat-list-item>
-</mat-list>
 
-<ul>
-  <li><button mat-button routerLink="/createHouse" routerLinkActive="active">Ajouter une maison</button></li>
-</ul>
+  <ul class="listActions">
+    <li><button mat-button routerLink="/createHouse" routerLinkActive="active">Ajouter une maison</button></li>
+  </ul>
+
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" *ngIf="(dataSource && dataSource.length > 0)">
+
+    <!-- Position Id house -->
+    <ng-container matColumnDef="idHouse">
+      <th mat-header-cell *matHeaderCellDef> Id de la maison </th>
+      <td mat-cell *matCellDef="let element"> {{element.idHouse}} </td>
+    </ng-container>
+
+    <!-- Price Column -->
+    <ng-container matColumnDef="price">
+      <th mat-header-cell *matHeaderCellDef> Prix </th>
+      <td mat-cell *matCellDef="let element"> {{element.price}} </td>
+    </ng-container>
+
+    <!-- Owner Column -->
+    <ng-container matColumnDef="owner">
+      <th mat-header-cell *matHeaderCellDef> Propriétaire </th>
+      <td mat-cell *matCellDef="let element"> {{element.owner}} </td>
+    </ng-container>
+
+    <!-- Actions Column -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> Actions </th>
+      <td mat-cell *matCellDef="let element">
+        <button mat-button (click)="buyHouse(element.idHouse, element.price)">
+          Acheter
+        </button>
+        &nbsp;
+        <span class="info">
+          <i class="fa fa-info-circle" aria-hidden="true"></i>
+        </span>
+      </td>
+
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+</div>

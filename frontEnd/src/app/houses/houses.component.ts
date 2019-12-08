@@ -3,6 +3,12 @@ import { House } from 'src/model/house';
 import { ContractService } from '../services/contract.service';
 import { Web3Service } from './../services/web3.service';
 
+export interface PeriodicElement {
+  idHouse: number;
+  price: number;
+  owner: string;
+}
+
 @Component({
   selector: 'app-houses',
   templateUrl: './houses.component.html',
@@ -14,6 +20,9 @@ export class HousesComponent implements OnInit {
 
   balance: number;
   from: string;
+
+  displayedColumns: string[] = ['idHouse', 'price', 'owner', 'actions'];
+  dataSource;
 
   constructor(
     private contractService: ContractService,
@@ -46,10 +55,23 @@ export class HousesComponent implements OnInit {
   private getSaleHouses(account) {
     this.contractService.getSaleHouses(account).subscribe(data => {
       this.houses = data;
-    }, error => console.log('error', error));
+      const dataSource = [];
+      data.forEach(house => {
+        dataSource.push({
+          idHouse: house.idHouse,
+          price: house.price,
+          owner: house.owner
+        });
+      });
+      this.dataSource = dataSource;
+
+    }, error => this.dataSource = []);
   }
 
-  public buyHouse(house: House) {
+  public buyHouse(idHouse: number, price: number) {
+    const house = new House();
+    house.idHouse = idHouse;
+    house.price = price;
     this.contractService.buyHouse(
       this.from,
       house
