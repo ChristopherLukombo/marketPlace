@@ -49,3 +49,5 @@ testem.log
 Thumbs.db
 
 .ionide/symbolCache.db
+
+backEnd/build/contracts/
