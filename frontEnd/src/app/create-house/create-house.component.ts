@@ -108,8 +108,6 @@ export class CreateHouseComponent implements OnInit {
 
     this.contractService.addHouse(house, this.from)
       .subscribe(data => {
-        debugger
-        console.log('id ', data);
         this.getHouseLastHouse();
       }, error => {
         this.submitted = false;
