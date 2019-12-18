@@ -19,6 +19,7 @@ import { HouseInfoComponent } from './house-info/house-info.component';
 import { HousesComponent } from './houses/houses.component';
 import { ContractService } from './services/contract.service';
 import { Web3Service } from './services/web3.service';
+import { IpfsService } from './services/ipfs.service';
 
 @NgModule({
   declarations: [
@@ -45,13 +46,15 @@ import { Web3Service } from './services/web3.service';
     MatSelectModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatTableModule
+    MatTableModule,
+    MatSelectModule
   ],
   providers: [
     ContractService,
     Web3Service,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    IpfsService
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
   bootstrap: [AppComponent]
