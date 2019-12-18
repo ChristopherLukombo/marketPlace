@@ -51,3 +51,5 @@ Thumbs.db
 .ionide/symbolCache.db
 
 backEnd/build/contracts/
+
+.vscode/launch.json

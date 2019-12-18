@@ -1,123 +1,135 @@
 <div class="container">
-<h2>Création d'une maison</h2>
+  <h2>Création d'une maison</h2>
 
-<div class="errorMessage" *ngIf="errorMessage != null">
-  {{errorMessage}}
-</div>
+  <div class="errorMessage" *ngIf="errorMessage != null">
+    {{errorMessage}}
+  </div>
 
-<form class="example-form" [formGroup]="createHouseForm" (ngSubmit)="addHouse()">
+  <form class="example-form" [formGroup]="createHouseForm" (ngSubmit)="addHouse()">
 
     <div>
-        <mat-form-field class="example-full-width">
-          <input matInput type="text" placeholder="Titre de l'annonce" name="title" formControlName="title">
-        </mat-form-field>
-      </div>
+      <mat-form-field class="example-full-width">
+        <input matInput type="text" placeholder="Titre de l'annonce" name="title" formControlName="title">
+      </mat-form-field>
+    </div>
 
-  <div class="errorMessageField" *ngIf="(submitted && f.title.errors)">
+    <div class="errorMessageField" *ngIf="(submitted && f.title.errors)">
       <div *ngIf="f.title.errors.required">
-       Le champs est obligatoire
+        Le champs est obligatoire
       </div>
-  </div>
-
-
-  <div>
-    <mat-form-field class="example-full-width">
-      <input matInput type="text" placeholder="Addresse" name="addressHouse" formControlName="addressHouse">
-    </mat-form-field>
-  </div>
-
-  <div class="errorMessageField" *ngIf="(submitted && f.addressHouse.errors)">
-    <div *ngIf="f.addressHouse.errors.required">
-      Le champs est obligatoire
     </div>
-  </div>
 
-  <div>
-    <mat-form-field class="example-full-width">
-      <input matInput type="number" placeholder="Prix" name="price"   min="1" formControlName="price">
-    </mat-form-field>
-  </div>
 
-  <div class="errorMessageField" *ngIf="(submitted && f.price.errors)">
-    <div *ngIf="f.price.errors.required">
-      Le champs est obligatoire
+    <div>
+      <mat-form-field class="example-full-width">
+        <input matInput type="text" placeholder="Addresse" name="addressHouse" formControlName="addressHouse">
+      </mat-form-field>
     </div>
-  </div>
 
-  <div>
-    <mat-form-field class="example-full-width">
-      <input matInput type="number" placeholder="Surface" name="surface" formControlName="surface">
-    </mat-form-field>
-  </div>
-  <div class="errorMessageField" *ngIf="(submitted && f.surface?.errors)">
-    <div *ngIf="f.surface.errors.required">
-      Le champs est obligatoire
+    <div class="errorMessageField" *ngIf="(submitted && f.addressHouse.errors)">
+      <div *ngIf="f.addressHouse.errors.required">
+        Le champs est obligatoire
+      </div>
     </div>
-  </div>
 
-   <div>
-    <mat-form-field class="example-full-width">
-      <textarea  style="resize: none;" matInput type="text" placeholder="Description" name="description" formControlName="description"></textarea>
-    </mat-form-field>
-  </div>
-
-  <div class="errorMessageField" *ngIf="(submitted && f.description.errors)">
-    <div *ngIf="f.description.errors.required">
-      Le champs est obligatoire
+    <div>
+      <mat-form-field class="example-full-width">
+        <input matInput type="number" placeholder="Prix" name="price" min="1" formControlName="price">
+      </mat-form-field>
     </div>
-  </div>
 
-
-  <div>
-    <mat-form-field class="example-full-width">
-      <input matInput type="number" placeholder="Nombre de pièces" name="roomCount" min="0" formControlName="roomCount">
-    </mat-form-field>
-  </div>
-
-  <div class="errorMessageField" *ngIf="(submitted && f.roomCount.errors)">
-    <div *ngIf="f.roomCount.errors.required">
-      Le champs est obligatoire
+    <div class="errorMessageField" *ngIf="(submitted && f.price.errors)">
+      <div *ngIf="f.price.errors.required">
+        Le champs est obligatoire
+      </div>
     </div>
-  </div>
 
-  <div>
+    <div>
+      <mat-form-field class="example-full-width">
+        <input matInput type="number" placeholder="Surface" name="surface" formControlName="surface">
+      </mat-form-field>
+    </div>
+    <div class="errorMessageField" *ngIf="(submitted && f.surface?.errors)">
+      <div *ngIf="f.surface.errors.required">
+        Le champs est obligatoire
+      </div>
+    </div>
+
+    <div>
+      <mat-form-field class="example-full-width">
+        <textarea style="resize: none;" matInput type="text" placeholder="Description" name="description"
+          formControlName="description"></textarea>
+      </mat-form-field>
+    </div>
+
+    <div class="errorMessageField" *ngIf="(submitted && f.description.errors)">
+      <div *ngIf="f.description.errors.required">
+        Le champs est obligatoire
+      </div>
+    </div>
+
+
+    <div>
+      <mat-form-field class="example-full-width">
+        <input matInput type="number" placeholder="Nombre de pièces" name="roomCount" min="0"
+          formControlName="roomCount">
+      </mat-form-field>
+    </div>
+
+    <div class="errorMessageField" *ngIf="(submitted && f.roomCount.errors)">
+      <div *ngIf="f.roomCount.errors.required">
+        Le champs est obligatoire
+      </div>
+    </div>
+
+    <div>
+      <mat-form-field>
+        <input matInput [matDatepicker]="picker" placeholder="Choisir une date de création"
+          placeholder="Date de création" name="creationDate" formControlName="creationDate">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+    </div>
+
+
+    <div class="errorMessageField" *ngIf="(submitted && f.roomCount.errors)">
+      <div *ngIf="f.creationDate.errors.required">
+        Le champs est obligatoire
+      </div>
+    </div>
+
+
     <mat-form-field>
-      <input matInput [matDatepicker]="picker" placeholder="Choisir une date de création" placeholder="Date de création"
-        name="creationDate" formControlName="creationDate">
-      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #picker></mat-datepicker>
+      <mat-label>Propriétaire</mat-label>
+      <mat-select name="owner" formControlName="owner">
+        <mat-option *ngFor="let owner of owners" [value]="owner">
+          {{owner}}
+        </mat-option>
+      </mat-select>
     </mat-form-field>
-  </div>
 
-
-  <div class="errorMessageField" *ngIf="(submitted && f.roomCount.errors)">
-    <div *ngIf="f.creationDate.errors.required">
-      Le champs est obligatoire
+    <div class="errorMessageField" *ngIf="(submitted && f.owner.errors)">
+      <div *ngIf="f.owner.errors.required">
+        Le champs est obligatoire
+      </div>
     </div>
-  </div>
+    <br />
 
-
-  <mat-form-field>
-    <mat-label>Propriétaire</mat-label>
-    <mat-select name="owner" formControlName="owner">
-      <mat-option *ngFor="let owner of owners" [value]="owner">
-        {{owner}}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-
-  <div class="errorMessageField" *ngIf="(submitted && f.owner.errors)">
-    <div *ngIf="f.owner.errors.required">
-      Le champs est obligatoire
+    <div class="form-group">
+      <div class="custom-file">
+        <input type="file" id="fileImport" formControlName="fileImport" (change)="selectFile($event)">
+      </div>
     </div>
-  </div>
-  <br/>
-  <div>
-    <button mat-button mat-raised-button color="primary" type="submit">Créer</button>
-    &nbsp;
-    <button mat-button mat-raised-button color="primary" routerLink="/houses" routerLinkActive="active">Retour</button>
-  </div>
 
-</form>
+    <br/>
+
+    <div>
+      <button mat-button mat-raised-button color="primary" type="submit">Créer</button>
+      &nbsp;
+      <button mat-button mat-raised-button color="primary" routerLink="/houses"
+        routerLinkActive="active">Retour</button>
+    </div>
+
+  </form>
 
 </div>

@@ -3,22 +3,28 @@ pragma experimental ABIEncoderV2;
 
 contract MarketplaceEngine {
 
+    struct Material {
+        string    fileName;
+        string    fileHash;
+        uint256   idHouse;
+    }
+
     struct House {
         uint256 idHouse;
-        string title;
-        string addressHouse;
+        string  title;
+        string  addressHouse;
         uint256 price;
         uint256 surface;
-        string description;
+        string  description;
         uint256 roomCount;
         uint256 creationDate;
-        bool isSold;
+        bool    isSold;
         address owner;
     }
 
-    // Dictionary idHouse with userAddress
-	mapping(uint256 => address) public owners;
-    House[] public houses;
+
+    House[]    public houses;
+    Material[] public materials;
 
     address transferTo;
     address transferFrom;
@@ -29,18 +35,17 @@ contract MarketplaceEngine {
         transferFrom = msg.sender;
     }
 
-    function addHouse(
+    function addHouse (
         string memory _title,
         string memory _addressHouse,
-        uint256 _price,
-        uint256 _surface,
+        uint256       _price,
+        uint256       _surface,
         string memory _description,
-        uint256 _roomCount,
-        uint256 _creationDate,
-        address _owner
+        uint256       _roomCount,
+        uint256       _creationDate,
+        address       _owner
         ) public {
-            houses.push(
-                House(
+            houses.push(House(
                     houses.length + 1,
                     _title,
                     _addressHouse,
@@ -50,7 +55,49 @@ contract MarketplaceEngine {
                     _roomCount,
                     _creationDate,
                     false,
-                    _owner));
+                    _owner
+                    ));
+    }
+
+    function addMaterial(Material material) public
+    {
+        materials.push(material);
+    }
+
+    function getMaterialsByIdHouse(uint256 _idHouse) public view returns (Material[] memory)
+    {
+        Material[] memory materialList = findMaterialsByIdHouse(_idHouse);
+        require (materialList.length > 0, "No materials found !");
+        return materialList;
+    }
+
+    function findMaterialsByIdHouse(uint256 _idHouse) private view returns (Material[] memory)
+    {
+        uint i = 0;
+        uint index = 0;
+        uint count = 0;
+
+        while (i < materials.length)
+        {
+            if (_idHouse == materials[i].idHouse)
+            {
+                 count++;
+            }
+            i++;
+        }
+
+        i = 0;
+
+        Material[] memory materialList = new Material[](count);
+        while (i < materials.length)
+        {
+            if (_idHouse == materials[i].idHouse)
+            {
+                 materialList[index++] = materials[i];
+            }
+            i++;
+        }
+        return materialList;
     }
 
     function buyHouse(uint256 _idHouse) external payable returns (bool)
@@ -59,7 +106,7 @@ contract MarketplaceEngine {
         {
             if (houses[i].idHouse == _idHouse)
             {
-                require((msg.value - houses[i].price) > 0, "Le propriétaire doit disposé de suffisament d'argent");
+                require((msg.value - houses[i].price) > 0, "The owner must have enough money");
                 transferTo = houses[i].owner;
                 houses[i].isSold = true;
                 transferTo.transfer(msg.value);
@@ -72,7 +119,7 @@ contract MarketplaceEngine {
         return false;
     }
 
-    function getSaleHouses() public view returns (House[] memory)
+     function getSaleHouses() public view returns (House[] memory)
     {
         uint count = 0;
         uint index = 0;
@@ -102,11 +149,12 @@ contract MarketplaceEngine {
     function getHouseInfo(uint256 _idHouse) public view returns (House memory)
     {
         House memory house = findHouseById(_idHouse);
-        require (0 != house.idHouse, "La maison n'existe pas.");
+        require (0 != house.idHouse, "The house does not exist.");
         return house;
     }
 
-    function findHouseById(uint256 _idHouse) private view returns (House memory) {
+    function findHouseById(uint256 _idHouse) private view returns (House memory)
+    {
         for (uint k = 0; k < houses.length; k++)
         {
             if (houses[k].idHouse == _idHouse)
