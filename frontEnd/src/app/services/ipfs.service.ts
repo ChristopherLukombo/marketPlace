@@ -1,16 +1,13 @@
-import { Injectable } from '@angular/core';
-import ipfs from 'ipfs';
+import { Inject, Injectable } from '@angular/core';
 import { Observable, Observer } from 'rxjs';
+import { IPFS } from '../ipfs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class IpfsService {
 
-  ipfs: ipfs;
-
-  constructor() {
-    this.ipfs = new ipfs();
+  constructor(@Inject(IPFS) private ipfs) {
   }
 
   addFile(file): Observable<any> {

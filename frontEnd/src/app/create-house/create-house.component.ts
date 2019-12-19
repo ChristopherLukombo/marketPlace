@@ -169,7 +169,7 @@ export class CreateHouseComponent implements OnInit {
     });
   }
 
-  private sendMaterialToGanache(material: Material) {
+  private sendMaterialToGanache(material: Material): void {
     this.contractService.sendMaterial(material, this.from)
       .subscribe(() => {
         console.log('succes');

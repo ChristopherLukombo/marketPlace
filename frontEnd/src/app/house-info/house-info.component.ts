@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { House } from 'src/model/house';
-import { ContractService } from '../services/contract.service';
-import { Web3Service } from '../services/web3.service';
 import { ActivatedRoute } from '@angular/router';
 import { saveAs } from 'file-saver';
-import { IpfsService } from '../services/ipfs.service';
 import { Material } from 'src/model/model.material';
+import { ContractService } from '../services/contract.service';
+import { IpfsService } from '../services/ipfs.service';
+import { Web3Service } from '../services/web3.service';
 
 @Component({
   selector: 'app-house-info',
@@ -31,7 +30,7 @@ export class HouseInfoComponent implements OnInit {
     this.onReady();
   }
 
-  private onReady() {
+  private onReady(): void {
     this.web3Service.getAccounts().subscribe(data => {
       this.from = data[0];
       this.getHouse();
@@ -40,13 +39,13 @@ export class HouseInfoComponent implements OnInit {
     });
   }
 
-  private getHouse() {
+  private getHouse(): void {
     const idHouse = Number(this.route.snapshot.paramMap.get('idHouse'));
     this.getHouseInfo(idHouse, this.from);
   }
 
-  private getHouseInfo(_idHouse: number, account: string) {
-    this.contractService.getHouseInfo(_idHouse, account)
+  private getHouseInfo(idHouse: number, account: string): void {
+    this.contractService.getHouseInfo(idHouse, account)
       .subscribe(data => {
         this.house = data;
         this.house.creationDate = new Date(this.house.creationDate * 1000);
@@ -54,8 +53,8 @@ export class HouseInfoComponent implements OnInit {
       }, error => console.log('error getHouseInfo', error));
   }
 
-  private findMaterialsByIdHouse(_idHouse: number, account: string) {
-    this.contractService.findMaterialsByIdHouse(_idHouse, account)
+  private findMaterialsByIdHouse(idHouse: number, account: string): void {
+    this.contractService.findMaterialsByIdHouse(idHouse, account)
       .subscribe(data => {
         this.materials = data;
       }, error => alert('error download'));
