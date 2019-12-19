@@ -14,20 +14,21 @@
       <mat-list-item><span class="subTitleContainer">Date de création &nbsp;</span> :
         {{house.creationDate | date: 'dd/MM/yyyy'}}</mat-list-item>
       <mat-list-item><span class="subTitleContainer">Propriétaire &nbsp;</span> : {{house.owner}}</mat-list-item>
-      <br/>
+      <br />
       <mat-list-item>
         <span class="subTitleContainer">Documents :
           <ul class="stypeList">
             <li *ngFor="let material of materials"> {{material.fileName}} &nbsp;
-              <button mat-button mat-raised-button color="primary" (click)="downloadMaterial(material.fileName, material.fileHash)">
-                Télécharger
-              </button>
+              <span class="iconDownload">
+                <i class="fa fa-download" aria-hidden="true"
+                  (click)="downloadMaterial(material.fileName, material.fileHash)"></i>
+              </span>
             </li>
           </ul>
         </span>
       </mat-list-item>
     </mat-list>
-    <br/>
+    <br />
     <button mat-button mat-raised-button color="primary" routerLink="/houses" routerLinkActive="active"
       class="btnReturn">Retour</button>
   </div>

@@ -35,10 +35,8 @@ export class CreateHouseComponent implements OnInit {
 
   owners: string[];
 
-  progress: { percentage: number } = { percentage: 0 };
-
-  currentFileToUpload: File;
   selectedFiles: FileList;
+  files = new Map<number, File>();
 
   constructor(
     private web3Service: Web3Service,
@@ -65,17 +63,14 @@ export class CreateHouseComponent implements OnInit {
       roomCount: ['', [Validators.required]],
       creationDate: ['', [Validators.required]],
       owner: ['', [Validators.required]],
-      fileImport: ['', [Validators.required]],
     };
 
     this.createHouseForm = this.formBuilder.group(config);
   }
 
-  selectFile(event: any): void {
+  selectFile(event: any, index: number): void {
     this.selectedFiles = event.target.files;
-    this.progress.percentage = 0;
-
-    this.currentFileToUpload = this.selectedFiles.item(0);
+    this.files.set(index, this.selectedFiles.item(0));
   }
 
   // convenience getter for easy access to form fields
@@ -132,28 +127,32 @@ export class CreateHouseComponent implements OnInit {
     this.contractService.getSaleHouses(this.from)
       .subscribe(house => {
         const idHouse = house[house.length - 1].idHouse;
-
-        const reader = new FileReader();
-        reader.onload = () => {
-
-          this.uploadFile(reader.result, idHouse);
-          this.resetForm();
-          this.openDialogSuccess();
-          this.submitted = false;
-          // redirection on list of houses
-          setTimeout(() => {
-            this.router.navigate(['houses']);
-            this.dialog.closeAll();
-          }, 3000);
-        };
-        reader.readAsArrayBuffer(this.currentFileToUpload);
+        // Sends files selected
+        for (const [key, value] of this.files) {
+          if (!value) {
+            continue;
+          }
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            this.uploadFile(value.name, reader.result, idHouse);
+          };
+          reader.readAsArrayBuffer(value);
+        }
+        this.openDialogSuccess();
+        this.resetForm();
+        this.submitted = false;
+        //  redirection on list of houses
+        setTimeout(() => {
+          this.router.navigate(['houses']);
+          this.dialog.closeAll();
+        }, 3000);
       }, error => {
         console.log(error);
       });
   }
 
-  private uploadFile(content: any, idHouse: number): void {
-    this.uploadFileToIpfs(this.currentFileToUpload.name, content, idHouse);
+  private uploadFile(fileName: string, content: any, idHouse: number): void {
+    this.uploadFileToIpfs(fileName, content, idHouse);
   }
 
   private uploadFileToIpfs(fileName: string, content: string, idHouse: number): void {
@@ -161,7 +160,7 @@ export class CreateHouseComponent implements OnInit {
       path: fileName,
       content: Buffer.from(content)
     }).subscribe(data => {
-      const material = this.buildMaterial(this.currentFileToUpload.name, data[0].hash, idHouse);
+      const material = this.buildMaterial(fileName, data[0].hash, idHouse);
 
       // If file is uploaded to ipfs, we send data to Ganache
       this.sendMaterialToGanache(material);
