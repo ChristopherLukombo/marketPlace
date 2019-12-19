@@ -22,21 +22,24 @@ export class HeaderComponent implements OnInit {
   }
 
   private onReady() {
-    this.web3Service.getAccounts().subscribe(data => {
-      this.from = data[0];
-      this.ngZone.run(() =>
-        this.refreshBalance()
-      );
-    }, error => alert(error));
+    this.web3Service.getAccounts()
+      .subscribe(data => {
+        this.from = data[0];
+        this.ngZone.run(() =>
+          this.refreshBalance()
+        );
+      }, error => alert(error));
   }
 
   private refreshBalance() {
-    this.web3Service.getAccountInfo().subscribe(data => {
-      this.balance = data.balance;
-    }, error => alert(error));
+    this.web3Service.getAccountInfo()
+      .subscribe(data => {
+        this.balance = data.balance;
+      }, error => alert(error));
 
-    this.web3Service.balance.subscribe(value => {
-      this.balance = value;
-    });
+    this.web3Service.balance
+      .subscribe(value => {
+        this.balance = value;
+      });
   }
 }

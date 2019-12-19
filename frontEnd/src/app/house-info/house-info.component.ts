@@ -31,12 +31,13 @@ export class HouseInfoComponent implements OnInit {
   }
 
   private onReady(): void {
-    this.web3Service.getAccounts().subscribe(data => {
-      this.from = data[0];
-      this.getHouse();
-    }, error => {
-      this.house = null;
-    });
+    this.web3Service.getAccounts()
+      .subscribe(data => {
+        this.from = data[0];
+        this.getHouse();
+      }, error => {
+        this.house = null;
+      });
   }
 
   private getHouse(): void {

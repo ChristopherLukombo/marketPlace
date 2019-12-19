@@ -37,37 +37,40 @@ export class HousesComponent implements OnInit {
   }
 
   private onReady() {
-    this.web3Service.getAccounts().subscribe(data => {
-      this.from = data[0];
-      this.ngZone.run(() =>
-        this.refreshBalance()
-      );
-    }, error => this.errorMessage = 'Une erreur s\'est produite');
+    this.web3Service.getAccounts()
+      .subscribe(data => {
+        this.from = data[0];
+        this.ngZone.run(() =>
+          this.refreshBalance()
+        );
+      }, error => this.errorMessage = 'Une erreur s\'est produite');
   }
 
   private refreshBalance() {
-    this.web3Service.getAccountInfo().subscribe(data => {
-      this.balance = data.balance;
-      this.web3Service.balance.next(this.balance);
-      this.getSaleHouses(this.from);
-    }, error => this.errorMessage = 'Une erreur s\'est produite');
+    this.web3Service.getAccountInfo()
+      .subscribe(data => {
+        this.balance = data.balance;
+        this.web3Service.balance.next(this.balance);
+        this.getSaleHouses(this.from);
+      }, error => this.errorMessage = 'Une erreur s\'est produite');
   }
 
 
   private getSaleHouses(account: string) {
-    this.contractService.getSaleHouses(account).subscribe(data => {
-      this.houses = data;
-      const dataSource = [];
-      data.forEach(house => {
-        dataSource.push({
-          idHouse: house.idHouse,
-          title: house.title,
-          price: house.price,
-          isSold: house.isSold
+    this.contractService.getSaleHouses(account)
+      .subscribe(data => {
+        this.houses = data;
+        const dataSource = [];
+        data.forEach(house => {
+          dataSource.push({
+            idHouse: house.idHouse,
+            title: house.title,
+            price: house.price,
+            isSold: house.isSold
+          });
         });
-      });
-      this.dataSource = dataSource;
-    }, error => this.dataSource = []);
+        this.dataSource = dataSource;
+      }, error => this.dataSource = []);
   }
 
   public buyHouse(idHouse: number, price: number) {
@@ -91,7 +94,7 @@ export class HousesComponent implements OnInit {
       }
     }
     setTimeout(() => {
-       this.refreshBalance();
+      this.refreshBalance();
     }, 1000);
   }
 
