@@ -1,4 +1,5 @@
 import { Component, NgZone, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { NGXLogger } from 'ngx-logger';
 import { House } from 'src/model/house';
 import { ContractService } from '../services/contract.service';
@@ -31,7 +32,8 @@ export class HousesComponent implements OnInit {
     private logger: NGXLogger,
     private contractService: ContractService,
     private web3Service: Web3Service,
-    private ngZone: NgZone
+    private ngZone: NgZone,
+    private snackBar: MatSnackBar
   ) { }
 
   ngOnInit() {
@@ -49,6 +51,13 @@ export class HousesComponent implements OnInit {
         this.logger.error(error);
         this.errorMessage = 'Une erreur s\'est produite';
       });
+  }
+
+  private openSnackBar(message: string) {
+    this.snackBar.open(message, null, {
+      duration: 4000,
+      horizontalPosition: 'right'
+    });
   }
 
   private refreshBalance() {
@@ -91,11 +100,13 @@ export class HousesComponent implements OnInit {
       this.from,
       house
     ).subscribe(data => {
+      this.openSnackBar('Achat effectué');
       this.errorMessage = null;
       this.callBackSuccess(idHouse);
     }, error => {
       this.logger.error(error);
       this.errorMessage = 'Une erreur s\'est produite durant l\'achat. Vous ne disposez peut-être pas de suffisament de fond';
+      this.openSnackBar(this.errorMessage);
     });
   }
 

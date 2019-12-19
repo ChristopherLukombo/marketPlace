@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { NGXLogger } from 'ngx-logger';
 import { House } from 'src/model/house';
@@ -47,6 +48,7 @@ export class CreateHouseComponent implements OnInit {
     private formBuilder: FormBuilder,
     public dialog: MatDialog,
     private ipfsService: IpfsService,
+    private snackBar: MatSnackBar
   ) {
   }
 
@@ -75,6 +77,13 @@ export class CreateHouseComponent implements OnInit {
     this.files.set(index, this.selectedFiles.item(0));
   }
 
+  private openSnackBar(message: string) {
+    this.snackBar.open(message, null, {
+      duration: 4000,
+      horizontalPosition: 'right'
+    });
+  }
+
   // convenience getter for easy access to form fields
   get f() { return this.createHouseForm.controls; }
 
@@ -86,7 +95,7 @@ export class CreateHouseComponent implements OnInit {
         this.initOwners();
       }, error => {
         this.logger.error(error);
-        alert(error);
+        this.openSnackBar(error);
       });
   }
 
@@ -110,6 +119,7 @@ export class CreateHouseComponent implements OnInit {
         this.logger.error(error);
         this.submitted = false;
         this.errorMessage = 'Une erreur s\'est produite';
+        this.openSnackBar(this.errorMessage);
       });
   }
 
@@ -169,15 +179,17 @@ export class CreateHouseComponent implements OnInit {
       this.sendMaterialToGanache(material);
     }, error => {
       this.logger.error(error);
+      this.openSnackBar('Une erreur s\'est produite durant l\'upload');
     });
   }
 
   private sendMaterialToGanache(material: Material): void {
     this.contractService.sendMaterial(material, this.from)
       .subscribe(() => {
-        this.logger.log('succes');
+        this.logger.log('success');
       }, error => {
         this.logger.error(error);
+        this.openSnackBar('Une erreur s\'est produite durant l\'upload');
       });
   }
 

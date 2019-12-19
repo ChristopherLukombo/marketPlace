@@ -1,4 +1,5 @@
 import { Component, NgZone, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { NGXLogger } from 'ngx-logger';
 import { Web3Service } from '../services/web3.service';
 
@@ -31,7 +32,6 @@ export class HeaderComponent implements OnInit {
         );
       }, error => {
         this.logger.error(error);
-        alert(error);
       });
   }
 
@@ -41,7 +41,6 @@ export class HeaderComponent implements OnInit {
         this.balance = data.balance;
       }, error => {
         this.logger.error(error);
-        alert(error);
       });
 
     this.web3Service.balance
