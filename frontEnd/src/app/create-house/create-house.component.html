@@ -116,17 +116,8 @@
     <br />
 
     <div>
-      <div class="custom-file">
-        <input type="file" (change)="selectFile($event, 0)">
-      </div>
-      <div class="custom-file">
-        <input type="file" (change)="selectFile($event, 1)">
-      </div>
-      <div class="custom-file">
-        <input type="file" (change)="selectFile($event, 2)">
-      </div>
-      <div class="custom-file">
-        <input type="file" (change)="selectFile($event, 3)">
+      <div class="custom-file" *ngFor="let fileNumber of filesNumber">
+        <input type="file" (change)="selectFile($event, fileNumber)">
       </div>
     </div>
 

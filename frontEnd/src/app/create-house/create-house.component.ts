@@ -5,6 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { NGXLogger } from 'ngx-logger';
 import { House } from 'src/model/house';
+import { environment } from '../../environments/environment';
 import { Material } from '../../model/model.material';
 import { HouseDialogSuccessComponent } from '../house-dialog-success/house-dialog-success.component';
 import { ContractService } from '../services/contract.service';
@@ -39,6 +40,7 @@ export class CreateHouseComponent implements OnInit {
 
   selectedFiles: FileList;
   files = new Map<number, File>();
+  filesNumber: number[];
 
   constructor(
     private logger: NGXLogger,
@@ -55,6 +57,12 @@ export class CreateHouseComponent implements OnInit {
   ngOnInit() {
     this.createForm();
     this.onReady();
+    this.initNumberOfFiles();
+  }
+
+  private initNumberOfFiles() {
+    this.filesNumber = Array(environment.filesNumber).fill(0)
+      .map((x, i) => i);
   }
 
   private createForm(): void {

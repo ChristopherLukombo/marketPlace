@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  serverUrl: 'http://localhost:8545'
+  serverUrl: 'http://localhost:8545',
+  filesNumber: 4
 };
 
 /*
