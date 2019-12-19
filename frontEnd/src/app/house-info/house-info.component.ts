@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { saveAs } from 'file-saver';
 import { NGXLogger } from 'ngx-logger';
@@ -24,7 +25,8 @@ export class HouseInfoComponent implements OnInit {
     private contractService: ContractService,
     private web3Service: Web3Service,
     private route: ActivatedRoute,
-    private ipfsService: IpfsService
+    private ipfsService: IpfsService,
+    private snackBar: MatSnackBar
   ) { }
 
   ngOnInit() {
@@ -37,8 +39,16 @@ export class HouseInfoComponent implements OnInit {
         this.from = data[0];
         this.getHouse();
       }, error => {
+        this.logger.error(error);
         this.house = null;
       });
+  }
+
+  private openSnackBar(message: string) {
+    this.snackBar.open(message, null, {
+      duration: 4000,
+      horizontalPosition: 'right'
+    });
   }
 
   private getHouse(): void {
@@ -53,7 +63,8 @@ export class HouseInfoComponent implements OnInit {
         this.house.creationDate = new Date(this.house.creationDate * 1000);
         this.findMaterialsByIdHouse(this.house.idHouse, this.from);
       }, error => {
-        this.logger.error('error getHouseInfo', error);
+        this.logger.error('Error during getHouseInfo', error);
+        this.openSnackBar('Une erreur s\'est produite durant la récupération des informations');
       });
   }
 
@@ -63,7 +74,7 @@ export class HouseInfoComponent implements OnInit {
         this.materials = data;
       }, error => {
         this.logger.error(error);
-        alert('error download');
+        this.openSnackBar('Pas de matériels');
       });
   }
 
@@ -76,7 +87,7 @@ export class HouseInfoComponent implements OnInit {
         saveAs(blob, fileName);
       }, error => {
         this.logger.error(error);
-        alert('Une erreur s\'est produite durant le téléchargement');
+        this.openSnackBar('Une erreur s\'est produite durant le téléchargement');
       });
   }
 
