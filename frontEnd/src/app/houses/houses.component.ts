@@ -1,4 +1,5 @@
 import { Component, NgZone, OnInit } from '@angular/core';
+import { NGXLogger } from 'ngx-logger';
 import { House } from 'src/model/house';
 import { ContractService } from '../services/contract.service';
 import { Web3Service } from './../services/web3.service';
@@ -27,6 +28,7 @@ export class HousesComponent implements OnInit {
   errorMessage: string;
 
   constructor(
+    private logger: NGXLogger,
     private contractService: ContractService,
     private web3Service: Web3Service,
     private ngZone: NgZone
@@ -43,7 +45,10 @@ export class HousesComponent implements OnInit {
         this.ngZone.run(() =>
           this.refreshBalance()
         );
-      }, error => this.errorMessage = 'Une erreur s\'est produite');
+      }, error => {
+        this.logger.error(error);
+        this.errorMessage = 'Une erreur s\'est produite';
+      });
   }
 
   private refreshBalance() {
@@ -52,9 +57,11 @@ export class HousesComponent implements OnInit {
         this.balance = data.balance;
         this.web3Service.balance.next(this.balance);
         this.getSaleHouses(this.from);
-      }, error => this.errorMessage = 'Une erreur s\'est produite');
+      }, error => {
+        this.logger.error(error);
+        this.errorMessage = 'Une erreur s\'est produite';
+      });
   }
-
 
   private getSaleHouses(account: string) {
     this.contractService.getSaleHouses(account)
@@ -70,7 +77,10 @@ export class HousesComponent implements OnInit {
           });
         });
         this.dataSource = dataSource;
-      }, error => this.dataSource = []);
+      }, error => {
+        this.logger.error(error);
+        this.dataSource = [];
+      });
   }
 
   public buyHouse(idHouse: number, price: number) {

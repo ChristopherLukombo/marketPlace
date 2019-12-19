@@ -30,7 +30,8 @@
     "truffle-contract": "~4.0.31",
     "tslib": "^1.10.0",
     "web3": "~1.2.4",
-    "zone.js": "~0.9.1"
+    "zone.js": "~0.9.1",
+    "ngx-logger": "~4.0.8"
   },
   "devDependencies": {
     "@angular-builders/custom-webpack": "^8.4.1",

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { saveAs } from 'file-saver';
+import { NGXLogger } from 'ngx-logger';
 import { Material } from 'src/model/model.material';
 import { ContractService } from '../services/contract.service';
 import { IpfsService } from '../services/ipfs.service';
@@ -19,12 +20,12 @@ export class HouseInfoComponent implements OnInit {
   materials: Array<Material>;
 
   constructor(
+    private logger: NGXLogger,
     private contractService: ContractService,
     private web3Service: Web3Service,
     private route: ActivatedRoute,
     private ipfsService: IpfsService
   ) { }
-
 
   ngOnInit() {
     this.onReady();
@@ -51,14 +52,19 @@ export class HouseInfoComponent implements OnInit {
         this.house = data;
         this.house.creationDate = new Date(this.house.creationDate * 1000);
         this.findMaterialsByIdHouse(this.house.idHouse, this.from);
-      }, error => console.log('error getHouseInfo', error));
+      }, error => {
+        this.logger.error('error getHouseInfo', error);
+      });
   }
 
   private findMaterialsByIdHouse(idHouse: number, account: string): void {
     this.contractService.findMaterialsByIdHouse(idHouse, account)
       .subscribe(data => {
         this.materials = data;
-      }, error => alert('error download'));
+      }, error => {
+        this.logger.error(error);
+        alert('error download');
+      });
   }
 
   public downloadMaterial(fileName: string, fileHash: string): void {
@@ -69,6 +75,7 @@ export class HouseInfoComponent implements OnInit {
         // download the document
         saveAs(blob, fileName);
       }, error => {
+        this.logger.error(error);
         alert('Une erreur s\'est produite durant le téléchargement');
       });
   }

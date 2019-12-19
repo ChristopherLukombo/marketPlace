@@ -1,3 +1,5 @@
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import { APP_INITIALIZER, CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -10,6 +12,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CreateHouseComponent } from './create-house/create-house.component';
@@ -48,7 +51,14 @@ import { Web3Service } from './services/web3.service';
     MatDatepickerModule,
     MatNativeDateModule,
     MatTableModule,
-    MatSelectModule
+    HttpClientModule,
+    MatSelectModule,
+    LoggerModule.forRoot(
+      {
+        level: NgxLoggerLevel.DEBUG,
+        serverLogLevel: NgxLoggerLevel.ERROR
+      }
+    )
   ],
   providers: [
     ContractService,
@@ -61,6 +71,10 @@ import { Web3Service } from './services/web3.service';
       useFactory: initIPFS,
       multi: true,
       deps: [IPFS]
+    },
+    {
+      provide: LocationStrategy,
+      useClass: HashLocationStrategy
     }
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
