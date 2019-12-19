@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { NGXLogger } from 'ngx-logger';
 import { House } from 'src/model/house';
 import { Material } from '../../model/model.material';
 import { HouseDialogSuccessComponent } from '../house-dialog-success/house-dialog-success.component';
@@ -39,6 +40,7 @@ export class CreateHouseComponent implements OnInit {
   files = new Map<number, File>();
 
   constructor(
+    private logger: NGXLogger,
     private web3Service: Web3Service,
     private contractService: ContractService,
     private router: Router,
@@ -48,7 +50,7 @@ export class CreateHouseComponent implements OnInit {
   ) {
   }
 
-   ngOnInit() {
+  ngOnInit() {
     this.createForm();
     this.onReady();
   }
@@ -82,14 +84,17 @@ export class CreateHouseComponent implements OnInit {
         this.accounts = data;
         this.from = this.accounts[0];
         this.initOwners();
-      }, error => alert(error));
+      }, error => {
+        this.logger.error(error);
+        alert(error);
+      });
   }
 
   private initOwners(): void {
     this.owners = [];
     for (let i = 1; i < this.accounts.length; i++) {
       this.owners.push(this.accounts[i]);
-    }
+  }
   }
 
   public addHouse(): void {
@@ -105,6 +110,7 @@ export class CreateHouseComponent implements OnInit {
       .subscribe(data => {
         this.getHouseLastHouse();
       }, error => {
+        this.logger.error(error);
         this.submitted = false;
         this.errorMessage = 'Une erreur s\'est produite';
       });
@@ -147,7 +153,7 @@ export class CreateHouseComponent implements OnInit {
           this.dialog.closeAll();
         }, 3000);
       }, error => {
-        console.log(error);
+        this.logger.error(error);
       });
   }
 
@@ -165,15 +171,17 @@ export class CreateHouseComponent implements OnInit {
       // If file is uploaded to ipfs, we send data to Ganache
       this.sendMaterialToGanache(material);
     }, error => {
-      console.log(error);
+      this.logger.error(error);
     });
   }
 
   private sendMaterialToGanache(material: Material): void {
     this.contractService.sendMaterial(material, this.from)
       .subscribe(() => {
-        console.log('succes');
-      }, error => console.log(error));
+        this.logger.log('succes');
+      }, error => {
+        this.logger.error(error);
+      });
   }
 
   private buildMaterial(fileName: string, fileHash: string, idHouse: number): Material {

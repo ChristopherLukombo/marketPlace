@@ -1,5 +1,5 @@
-import { Component, OnInit, NgZone } from '@angular/core';
-import { ContractService } from '../services/contract.service';
+import { Component, NgZone, OnInit } from '@angular/core';
+import { NGXLogger } from 'ngx-logger';
 import { Web3Service } from '../services/web3.service';
 
 @Component({
@@ -13,6 +13,7 @@ export class HeaderComponent implements OnInit {
   from: string;
 
   constructor(
+    private logger: NGXLogger,
     private web3Service: Web3Service,
     private ngZone: NgZone
   ) { }
@@ -28,14 +29,20 @@ export class HeaderComponent implements OnInit {
         this.ngZone.run(() =>
           this.refreshBalance()
         );
-      }, error => alert(error));
+      }, error => {
+        this.logger.error(error);
+        alert(error);
+      });
   }
 
   private refreshBalance() {
     this.web3Service.getAccountInfo()
       .subscribe(data => {
         this.balance = data.balance;
-      }, error => alert(error));
+      }, error => {
+        this.logger.error(error);
+        alert(error);
+      });
 
     this.web3Service.balance
       .subscribe(value => {
