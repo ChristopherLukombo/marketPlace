@@ -93,7 +93,10 @@ export class HousesComponent implements OnInit {
     ).subscribe(data => {
       this.errorMessage = null;
       this.callBackSuccess(idHouse);
-    }, error => this.errorMessage = 'Une erreur s\'est produite durant l\'achat. Vous ne disposez peut-être pas de suffisament de fond');
+    }, error => {
+      this.logger.error(error);
+      this.errorMessage = 'Une erreur s\'est produite durant l\'achat. Vous ne disposez peut-être pas de suffisament de fond';
+    });
   }
 
   private callBackSuccess(idHouse: number) {
