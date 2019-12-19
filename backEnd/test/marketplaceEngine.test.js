@@ -21,14 +21,14 @@ describe('MarketplaceEngine Contract', () => {
     });
 
     it('adds one house', async () => {
-        await marketplaceEngine.methods.addHouse('dedz',
+        await marketplaceEngine.methods.addHouse(
+        'dedz',
+        '28, avenue de la rue de Paris',
+        17,
         12,
-        12,
-        'zdzdz',
-        [accounts[1]],
-        accounts[1],
+        'bien',
         1,
-        1,
+        1123,
         accounts[1]).send({
             from: accounts[3],
             gas:3000000
@@ -42,26 +42,26 @@ describe('MarketplaceEngine Contract', () => {
     });
 
     it('adds two houses', async () => {
-        await marketplaceEngine.methods.addHouse('dedz',
+        await marketplaceEngine.methods.addHouse(
+        'dedz',
+        '28, avenue de la rue de Paris',
+        17,
         12,
-        12,
-        'zdzdz',
-        [accounts[1]],
-        accounts[1],
+        'bien',
         1,
-        1,
+        1123,
         accounts[1]).send({
             from: accounts[0],
             gas:3000000
         });
-        await marketplaceEngine.methods.addHouse('dedz',
+        await marketplaceEngine.methods.addHouse(
+        'dedz',
+        '28, avenue de la rue de Paris',
+        17,
         12,
-        12,
-        'zdzdz',
-        [accounts[1]],
-        accounts[1],
+        'bien',
         1,
-        1,
+        1123,
         accounts[1]).send({
             from: accounts[0],
             gas:3000000
@@ -75,20 +75,20 @@ describe('MarketplaceEngine Contract', () => {
     });
 
     it('gets house infos', async () => {
-        await marketplaceEngine.methods.addHouse('dedz',
+        await marketplaceEngine.methods.addHouse(
+        'dedz',
+        '28, avenue de la rue de Paris',
+        17,
         12,
-        12,
-        'zdzdz',
-        [accounts[1]],
-        accounts[1],
+        'bien',
         1,
-        1,
+        1123,
         accounts[1]).send({
             from: accounts[0],
             gas:3000000
         });
 
-        const house = await marketplaceEngine.methods.getHouseInfo(0).call({
+        const house = await marketplaceEngine.methods.getHouseInfo(1).call({
                 from: accounts[0]
             });
 
@@ -96,20 +96,20 @@ describe('MarketplaceEngine Contract', () => {
     });
 
     it('buys a house', async () => {
-        await marketplaceEngine.methods.addHouse('dedz',
-        1000000,
+        await marketplaceEngine.methods.addHouse(
+        'dedz',
+        '28, avenue de la rue de Paris',
+        17,
         12,
-        'zdzdz',
-        [accounts[1]],
-        accounts[1],
+        'bien',
         1,
-        1,
-        accounts[7]).send({
+        1123,
+        accounts[1]).send({
             from: accounts[0],
             gas:3000000,
         });
 
-        const isBought = await marketplaceEngine.methods.buyHouse(0).call({
+        const isBought = await marketplaceEngine.methods.buyHouse(1).call({
                 from: accounts[0],
                 value: web3.utils.toWei('0.01', 'ether')
             });
@@ -120,5 +120,43 @@ describe('MarketplaceEngine Contract', () => {
     it ('has no money and is ready for a new marketplaceEngine', async () => {
         assert.equal(await web3.eth.getBalance(marketplaceEngine.options.address), 0);
     });
+
+    it('adds one material', async () => {
+        const material = {
+            fileName: 'text.txt',
+            fileHash: 'jejedze',
+            idHouse: 1
+        };
+        await marketplaceEngine.methods.addMaterial(material).send({
+            from: accounts[3],
+            gas:3000000
+        });
+
+        const materials = await marketplaceEngine.methods.getMaterialsByIdHouse(1).call({
+                from: accounts[0]
+            });
+
+        assert.equal(materials.length, 1);
+    });
+
+    it('has no materials', async () => {
+        try {
+            await marketplaceEngine.methods.getMaterialsByIdHouse(1).call({
+                from: accounts[0]
+            });
+        } catch (error) {
+            assert(undefined !== error);
+        }
+    }).timeout(10000);
+
+    it('has no houses', async () => {
+        try {
+            await marketplaceEngine.methods.getHouseInfo(1).call({
+                from: accounts[0]
+            });
+        } catch (error) {
+            assert(undefined !== error);
+        }
+    }).timeout(10000);
 
 });
