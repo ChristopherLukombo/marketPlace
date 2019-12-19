@@ -1,4 +1,4 @@
-import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
+import { APP_INITIALIZER, CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatNativeDateModule } from '@angular/material/core';
@@ -17,9 +17,10 @@ import { HeaderComponent } from './header/header.component';
 import { HouseDialogSuccessComponent } from './house-dialog-success/house-dialog-success.component';
 import { HouseInfoComponent } from './house-info/house-info.component';
 import { HousesComponent } from './houses/houses.component';
+import { initIPFS, IPFS } from './ipfs';
 import { ContractService } from './services/contract.service';
-import { Web3Service } from './services/web3.service';
 import { IpfsService } from './services/ipfs.service';
+import { Web3Service } from './services/web3.service';
 
 @NgModule({
   declarations: [
@@ -54,9 +55,15 @@ import { IpfsService } from './services/ipfs.service';
     Web3Service,
     MatDatepickerModule,
     MatNativeDateModule,
-    IpfsService
+    IpfsService,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initIPFS,
+      multi: true,
+      deps: [IPFS]
+    }
   ],
-  schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

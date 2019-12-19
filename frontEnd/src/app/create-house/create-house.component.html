@@ -115,9 +115,18 @@
     </div>
     <br />
 
-    <div class="form-group">
+    <div>
       <div class="custom-file">
-        <input type="file" id="fileImport" formControlName="fileImport" (change)="selectFile($event)">
+        <input type="file" (change)="selectFile($event, 0)">
+      </div>
+      <div class="custom-file">
+        <input type="file" (change)="selectFile($event, 1)">
+      </div>
+      <div class="custom-file">
+        <input type="file" (change)="selectFile($event, 2)">
+      </div>
+      <div class="custom-file">
+        <input type="file" (change)="selectFile($event, 3)">
       </div>
     </div>
 
