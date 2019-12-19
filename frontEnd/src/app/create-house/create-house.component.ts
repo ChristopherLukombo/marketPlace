@@ -91,10 +91,7 @@ export class CreateHouseComponent implements OnInit {
   }
 
   private initOwners(): void {
-    this.owners = [];
-    for (let i = 1; i < this.accounts.length; i++) {
-      this.owners.push(this.accounts[i]);
-  }
+    this.owners = this.accounts.filter((a: string, i: number) => i > 0);
   }
 
   public addHouse(): void {
