@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, Observer, BehaviorSubject } from 'rxjs';
 import { environment } from '../../environments/environment';
 
-declare var require: any;
+declare let require: any;
 const Web3 = require('web3');
 declare let window: any;
 
