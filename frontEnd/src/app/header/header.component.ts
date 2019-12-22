@@ -1,5 +1,6 @@
-import { Component, OnInit, NgZone } from '@angular/core';
-import { ContractService } from '../services/contract.service';
+import { Component, NgZone, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { NGXLogger } from 'ngx-logger';
 import { Web3Service } from '../services/web3.service';
 
 @Component({
@@ -13,6 +14,7 @@ export class HeaderComponent implements OnInit {
   from: string;
 
   constructor(
+    private logger: NGXLogger,
     private web3Service: Web3Service,
     private ngZone: NgZone
   ) { }
@@ -22,21 +24,28 @@ export class HeaderComponent implements OnInit {
   }
 
   private onReady() {
-    this.web3Service.getAccounts().subscribe(data => {
-      this.from = data[0];
-      this.ngZone.run(() =>
-        this.refreshBalance()
-      );
-    }, error => alert(error));
+    this.web3Service.getAccounts()
+      .subscribe(data => {
+        this.from = data[0];
+        this.ngZone.run(() =>
+          this.refreshBalance()
+        );
+      }, error => {
+        this.logger.error(error);
+      });
   }
 
   private refreshBalance() {
-    this.web3Service.getAccountInfo().subscribe(data => {
-      this.balance = data.balance;
-    }, error => alert(error));
+    this.web3Service.getAccountInfo()
+      .subscribe(data => {
+        this.balance = data.balance;
+      }, error => {
+        this.logger.error(error);
+      });
 
-    this.web3Service.balance.subscribe(value => {
-      this.balance = value;
-    });
+    this.web3Service.balance
+      .subscribe(value => {
+        this.balance = value;
+      });
   }
 }

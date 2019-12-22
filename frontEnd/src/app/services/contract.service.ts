@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable, Observer } from 'rxjs';
+import { House } from 'src/model/house';
+import { Material } from 'src/model/model.material';
 import contract from 'truffle-contract';
 import { Web3Service } from './web3.service';
-import { House } from 'src/model/house';
 
 declare let window: any;
 
@@ -62,7 +63,7 @@ export class ContractService {
     });
   }
 
-  getHouseInfo(_idHouse: number, from: string) {
+  getHouseInfo(_idHouse: number, from: string): Observable<any> {
     return new Observable((observer: Observer<any>) => {
       this.MetaCoin
         .deployed()
@@ -80,7 +81,7 @@ export class ContractService {
     });
   }
 
-  getSaleHouses(from: string) {
+  getSaleHouses(from: string): Observable<any> {
     return new Observable((observer: Observer<any>) => {
       this.MetaCoin
         .deployed()
@@ -93,5 +94,41 @@ export class ContractService {
         });
     });
   }
+
+  sendMaterial(material: Material, from: string): Observable<any> {
+    return new Observable((observer: Observer<any>) => {
+      this.MetaCoin
+        .deployed()
+        .then(instance => {
+          return instance.addMaterial(
+            material,
+            {
+              from,
+            });
+        }).then(data => {
+          observer.next(data);
+        }).catch(error => {
+          observer.error(error);
+        });
+    });
+  }
+
+    findMaterialsByIdHouse(_idHouse: number, from: string): Observable<any> {
+      return new Observable((observer: Observer<any>) => {
+        this.MetaCoin
+          .deployed()
+          .then(instance => {
+            return instance.getMaterialsByIdHouse(
+              _idHouse,
+              {
+                from,
+              });
+          }).then(data => {
+            observer.next(data);
+          }).catch(error => {
+            observer.error(error);
+          });
+      });
+    }
 
 }
